@@ -177,6 +177,12 @@ class Gist(ProxySource):
             artist = api_data.get("artist", "")
             author = api_data.get("author", "")
             cover = api_data.get("cover", "")
+            pages = api_data.get("pages")
+            if pages and not 'Pages: ' in description:
+                description = f'{description}\n\nPages: {pages}'
+            tags = api_data.get("genres", api_data.get("tags"))
+            if tags and not 'Tags: ' in description:
+                description = f'{description}\n\nTags: {", ".join(tags)}'
 
             groups_set = {
                 group
@@ -261,7 +267,7 @@ class Gist(ProxySource):
             return {
                 "slug": meta_id,
                 "title": title,
-                "description": description,
+                "description": description.lstrip(r'\n'),
                 "series": title,
                 "cover_vol_url": cover,
                 "metadata": metadata,
@@ -269,6 +275,7 @@ class Gist(ProxySource):
                 "artist": artist,
                 "groups": groups_dict,
                 "cover": cover,
+                "tags": tags,
                 "chapter_dict": chapter_dict,
                 "chapter_list": chapter_list,
                 "original_url": original_url,
