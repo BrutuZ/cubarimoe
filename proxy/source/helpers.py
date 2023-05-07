@@ -13,26 +13,26 @@ GLOBAL_HEADERS = {
 PROXY = "https://cubari-cors.herokuapp.com/"
 
 
-def naive_encode(url):
+def naive_encode(url) -> str:
     return url.replace("/", ENCODE_STR_SLASH).replace("?", ENCODE_STR_QUESTION)
 
 
-def naive_decode(url):
+def naive_decode(url) -> str:
     return url.replace(ENCODE_STR_SLASH, "/").replace(ENCODE_STR_QUESTION, "?")
 
 
-def decode(url: str):
+def decode(url: str) -> str:
     """Base64 URL decoding wrapper that automatically pads the string."""
     padding: int = 4 - (len(url) % 4)
     return str(base64.urlsafe_b64decode((url + ("=" * padding)).encode()), "utf-8")
 
 
-def encode(url: str):
+def encode(url: str) -> str:
     """Base64 URL encoding wrapper that automatically strips the = symbols, ensuring URL safety."""
     return str(base64.urlsafe_b64encode(url.encode()), "utf-8").rstrip("=")
 
 
-def get_wrapper(url, *, headers={}, use_proxy=False, **kwargs):
+def get_wrapper(url, *, headers={}, use_proxy=False, **kwargs) -> requests.Response:
     url = (
         f"{settings.EXTERNAL_PROXY_URL}/v1/cors/{encode(url)}?source=cubari_host"
         if use_proxy
@@ -41,7 +41,7 @@ def get_wrapper(url, *, headers={}, use_proxy=False, **kwargs):
     return requests.get(url, headers={**GLOBAL_HEADERS, **headers}, timeout=8, **kwargs)
 
 
-def post_wrapper(url, headers={}, use_proxy=False, **kwargs):
+def post_wrapper(url, headers={}, use_proxy=False, **kwargs) -> requests.Response:
     url = (
         f"{settings.EXTERNAL_PROXY_URL}/v1/cors/{encode(url)}?source=cubari_host"
         if use_proxy
