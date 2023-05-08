@@ -14,15 +14,13 @@
     content="Read chapter {{ chapter_number }} of {{ series_name }} | {{ brand.name }}">
   <meta name="twitter:description"
     content="Read chapter {{ chapter_number }} of {{ series_name }} | {{ brand.name }}">
-  <meta property="og:image" content="{{ brand.image_url }}">
-  <meta name="twitter:image" content="{{ brand.image_url }}">
   <meta name="author" content="{{ author_name }}">
   {% else %}
   <meta property="og:description" content="Read the {{ series_name }} manga series.">
   <meta name="twitter:description" content="Read the {{ series_name }} manga series.">
-  <meta property="og:image" content="{{ cover }}">
-  <meta name="twitter:image" content="{{ cover }}">
   {% endif %}
+  <meta property="og:image" content="{% firstof cover_vol_url cover brand.image_url %}">
+  <meta name="twitter:image" content="{% firstof cover_vol_url cover brand.image_url %}">
   <meta property="og:url" content="{{ absolute_url }}">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="{% static 'css/pickr.css' %}{{ version_query }}"/>
